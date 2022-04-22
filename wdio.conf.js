@@ -1,3 +1,5 @@
+const { default: BrowserstackService } = require('@wdio/browserstack-service');
+
 const {
     addStep,
     addFeature,
@@ -123,7 +125,7 @@ exports.config = {
         ['allure', {
             outputDir: 'allure-results',
             disableWebdriverStepsReporting: true,
-            // disableWebdriverScreenshotsReporting: true,
+            disableWebdriverScreenshotsReporting: true,
             useCucumberStepReporter: false,
         }]],
 
@@ -243,7 +245,8 @@ exports.config = {
      */
     afterTest: async function (test, context, { error, result, duration, passed, retries }) {
         if (!passed) {
-            await browser.takeScreenshot();
+            await browser.takeScreenshot(); 
+                                    
         }
     },
 
@@ -256,8 +259,14 @@ exports.config = {
         console.log(result.passed)
         console.log(result.passed)
         addDescription('TESTTESTTEST!!! <script>alert(123)</script>')
+        
+
 
         if (!result.passed) {
+            const image = await browser.takeScreenshot()
+            addAttachment('screenshot', Buffer(image, 'base64'), 'image/png');
+            addAttachment("html", await $('*').getHTML(), 'text/html')
+            addAttachment("cookies", JSON.stringify(await browser.getAllCookies()), 'text/plain')
             addDescription('TESTTESTTEST!!!<img src="https://s.keepmeme.com/files/en_posts/20200908/blurred-surprised-cat-meme-5b734a45210ef3b6657bcbe2831715fa.jpg">')
         }
         // await browser.reloadSession();

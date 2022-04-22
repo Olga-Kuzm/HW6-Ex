@@ -8,6 +8,7 @@ const { Table } = require("../../src/PO/tables/table.po");
 const Subscribe = require('../../src/PO/forms/subscribe.model');
 
 When(/^I go to "([^"]*)"$/, async function (url) {
+    await browser.maximizeWindow()
     await browser.url(url);
 });
 
@@ -28,9 +29,10 @@ When(/^I expect element: "([^"]*)" (text|value): "([^"]*)"$/, async function (se
         .toEqual(text)
 });
 
-When('I go to {string} menu item', function (item) {
-    // add implementation here
-});
+// When('I go to {string} menu item', async function (item) {
+//     const elem = await $(`*=${item}`)
+//     await $(elem).click()
+// });
 
 
 When('I login as: {string}, {string}', async function (login, password) {
@@ -73,11 +75,12 @@ When(/^I sort table by "([^"]*)"$/, async function (name) {
 
 When(/^I fill form:$/, async function (formYaml) {
     const formData = YAML.parse(formYaml);
-    console.log({ formData });
-    console.log(Subscribe.model)
+    console.log('FORMDATA', formData );
+    console.log('MODEL',Subscribe.model)
     for (const elModel of Subscribe.model) {
         const el = new elModel.type(elModel.selector);
         await el.set(formData[elModel.name]);
         await browser.pause(200);
     }
+    await browser.pause(2000)
 });
