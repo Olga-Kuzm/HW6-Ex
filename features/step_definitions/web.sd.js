@@ -80,7 +80,6 @@ When(/^I fill form:$/, async function (formYaml) {
     for (const elModel of Subscribe.model) {
         const el = new elModel.type(elModel.selector);
         await el.set(formData[elModel.name]);
-        await browser.pause(200);
-    }
-    await browser.pause(2000)
+        await browser.pause(200);    }
+    
 });
